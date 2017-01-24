@@ -1,0 +1,5 @@
+FPS multijoueurs
+Avatar: boule volante avec canon
+Terrain: 3D avec bord et obstacles mortels au contacte
+Déplacement: en 3D , dash
+Tir: pousse l'adversaire en dehors du terrain

@@ -1,15 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : NetworkBehaviour {
 
     public float speed;
     public float speedH = 2.0f;
     public float speedV = 2.0f;
+    public float dashSpeed = 5.0f;
+    public float dashDuration = 1.0f;
 
     private float yaw = 0.0f;
     private float pitch = 0.0f;
+
+    private bool dashing = false;
+    private float dashStartTime;
+    private Vector3 dashDirection;
 
     // Use this for initialization
     void Start () {
@@ -18,11 +25,26 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (!isLocalPlayer)
+            return;
+
         Move();
 	}
 
     void Move()
     {
+        if(dashing)
+        {
+            if(Time.time - dashStartTime > dashDuration)
+            {
+                dashing = false;
+            } else
+            {
+                transform.Translate(dashDirection.normalized * Time.deltaTime * dashSpeed);
+                return;
+            }
+
+        }
         //rotation
         yaw += speedH * Input.GetAxis("Mouse X");
         pitch -= speedV * Input.GetAxis("Mouse Y");
@@ -61,7 +83,14 @@ public class PlayerController : MonoBehaviour {
         {
             move_direction.y -= 1;
         }
-        transform.Translate(move_direction.normalized * Time.deltaTime * speed);
+
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            dashing = true;
+            dashStartTime = Time.time;
+            dashDirection = move_direction;
+            transform.Translate(dashDirection.normalized * Time.deltaTime * dashSpeed);
+        } else transform.Translate(move_direction.normalized * Time.deltaTime * speed);
 
 
     }

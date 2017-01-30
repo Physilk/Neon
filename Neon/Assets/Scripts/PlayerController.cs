@@ -10,6 +10,8 @@ public class PlayerController : NetworkBehaviour {
     public float speedV = 2.0f;
     public float dashSpeed = 5.0f;
     public float dashDuration = 1.0f;
+    public float shootDuration = 0.25f;
+    public float maxLaserDistance = 2000.0f;
 
     private float yaw = 0.0f;
     private float pitch = 0.0f;
@@ -18,18 +20,28 @@ public class PlayerController : NetworkBehaviour {
     private float dashStartTime;
     private Vector3 dashDirection;
 
+    private bool shooting = false;
+    private float shootingStartTime;
+
+    private GameObject laser;
+
     // Use this for initialization
     void Start () {
-		
-	}
+        laser = GameObject.Find("Laser");
+        //pour debug
+        Screen.lockCursor = true;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if (!isLocalPlayer)
-            return;
+        //if (!isLocalPlayer)
+         //   return;
 
         Move();
-	}
+        Shoot();
+        if (Input.GetKey(KeyCode.Escape))
+            Screen.lockCursor = false;
+    }
 
     void Move()
     {
@@ -84,7 +96,7 @@ public class PlayerController : NetworkBehaviour {
             move_direction.y -= 1;
         }
 
-        if(Input.GetKey(KeyCode.LeftShift))
+        if(Input.GetKeyDown(KeyCode.Mouse1))
         {
             dashing = true;
             dashStartTime = Time.time;
@@ -93,5 +105,35 @@ public class PlayerController : NetworkBehaviour {
         } else transform.Translate(move_direction.normalized * Time.deltaTime * speed);
 
 
+    }
+    
+    void Shoot()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            shooting = true;
+            shootingStartTime = Time.time;
+
+
+            //raycast
+            Vector3 fwd = laser.transform.TransformDirection(Vector3.forward);
+
+            RaycastHit hit;
+            float dist = maxLaserDistance;
+
+            if (Physics.Raycast(transform.position, fwd, out hit, dist)) {
+                dist = hit.distance;
+            }
+            laser.transform.localScale = new Vector3(1, 1, dist);
+            laser.GetComponent<LineRenderer>().enabled = true;
+
+        } if (shooting)
+        {
+            if(Time.time - shootingStartTime > shootDuration)
+            {
+                shooting = false;
+                laser.GetComponent<LineRenderer>().enabled = false;
+            }
+        }
     }
 }

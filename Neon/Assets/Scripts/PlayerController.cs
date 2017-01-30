@@ -30,10 +30,12 @@ public class PlayerController : NetworkBehaviour {
     private Vector3 hitDirectionWorldSpace;
 
     private GameObject laser;
+    private Rigidbody rb;
 
     // Use this for initialization
     void Start () {
         laser = GameObject.Find("Laser");
+        rb = GetComponent<Rigidbody>();
         //pour debug
         Screen.lockCursor = true;
     }
@@ -175,4 +177,15 @@ public class PlayerController : NetworkBehaviour {
         }
         transform.Translate(hitDirectionWorldSpace.normalized * Time.deltaTime * hitSpeed, Space.World);
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        rb.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        rb.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+    }
+
 }

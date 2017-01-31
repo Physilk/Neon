@@ -352,7 +352,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0446729f6432ad3439e659c898277449, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -454,7 +454,7 @@ MonoBehaviour:
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 1278857481379968, guid: d41442a85dec7e2408cd2089d7ee7d22,
+  m_PlayerPrefab: {fileID: 1185281790452356, guid: d41442a85dec7e2408cd2089d7ee7d22,
     type: 2}
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 1

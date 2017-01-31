@@ -32,20 +32,33 @@ public class PlayerController : NetworkBehaviour {
     private GameObject laser;
     private Rigidbody rb;
 
+    private AudioSource audioSource;
+    public AudioClip dashSound;
+    public AudioClip shootSound;
+
+    private ParticleSystem particleSystem;
+
+    //pour debug
+    public bool isLocal = false;
+
     // Use this for initialization
     void Start () {
-        laser = GameObject.Find("Laser");
+        laser = transform.Find("Laser").gameObject;
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
+        particleSystem = GetComponent<ParticleSystem>();
+
         //pour debug
         Screen.lockCursor = true;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        //if (!isLocalPlayer)
-        //   return;
+        
 
         Hit();
+        if (!isLocal)
+            return;
         if (!affectedByHit)
         {
             Move();
@@ -110,13 +123,23 @@ public class PlayerController : NetworkBehaviour {
             move_direction.y -= 1;
         }
 
-        if(Input.GetKeyDown(KeyCode.Mouse1))
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            dashing = true;
-            dashStartTime = Time.time;
-            dashDirectionWorldSpace = transform.TransformDirection(move_direction);//Transform.Trans(move_direction);
-            transform.Translate(dashDirectionWorldSpace.normalized * Time.deltaTime * dashSpeed, Space.World);
-        } else transform.Translate(move_direction.normalized * Time.deltaTime * speed);
+            dashDirectionWorldSpace = transform.TransformDirection(move_direction);
+            if (DashCheck(dashDirectionWorldSpace))
+            {
+                audioSource.PlayOneShot(dashSound);
+                dashing = true;
+                dashStartTime = Time.time;
+                transform.Translate(dashDirectionWorldSpace.normalized * Time.deltaTime * dashSpeed, Space.World);
+            }
+
+        }
+        else
+        {
+            Vector3 move_direction_worldSpace = transform.TransformDirection(move_direction);
+            if (MoveCheck(transform.TransformDirection(move_direction_worldSpace))) transform.Translate(move_direction.normalized * Time.deltaTime * speed);
+        }
 
 
     }
@@ -127,6 +150,8 @@ public class PlayerController : NetworkBehaviour {
         {
             shooting = true;
             shootingStartTime = Time.time;
+
+            audioSource.PlayOneShot(shootSound);
 
 
             //raycast
@@ -140,7 +165,7 @@ public class PlayerController : NetworkBehaviour {
                 if (hit.transform != null)
                     if(hit.transform.gameObject.tag == "Player")
                     {
-                        hit.transform.gameObject.GetComponent<PlayerController>().SetHit(-fwd);
+                        hit.transform.gameObject.GetComponent<PlayerController>().SetHit(fwd);
                     }
             }
             laser.transform.localScale = new Vector3(1, 1, dist);
@@ -178,12 +203,47 @@ public class PlayerController : NetworkBehaviour {
         transform.Translate(hitDirectionWorldSpace.normalized * Time.deltaTime * hitSpeed, Space.World);
     }
 
+    bool DashCheck(Vector3 dashDirection)
+    {
+        RaycastHit hit;
+        float dist = dashDuration * dashSpeed;
+
+        if (Physics.Raycast(transform.position, dashDirection, out hit, dist))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    bool MoveCheck(Vector3 moveDirection)
+    {
+        RaycastHit hit;
+        float dist = transform.Find("playerMesh").GetComponent<SphereCollider>().radius;
+
+        if (Physics.Raycast(transform.position, moveDirection, out hit, dist))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public void Kill()
+    {
+        particleSystem.Emit(0);
+        enabled = false;
+    }
+
     void OnCollisionEnter(Collision collision)
     {
+        if(affectedByHit)
+        {
+            if (collision.gameObject.tag == "DeathWall")
+                Kill();
+        }
         rb.velocity = new Vector3(0.0f, 0.0f, 0.0f);
     }
 
-    private void OnCollisionExit(Collision collision)
+    void OnCollisionExit(Collision collision)
     {
         rb.velocity = new Vector3(0.0f, 0.0f, 0.0f);
     }

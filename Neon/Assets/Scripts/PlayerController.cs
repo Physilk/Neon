@@ -14,6 +14,14 @@ public class PlayerController : MonoBehaviour {
     public float hitDuration = 0.1f;
     public float hitSpeed = 100.0f;
 
+    public float maxEnergy = 100.0f;
+    public float energyRecovery = 20.0f; //per seconds
+    public float dashEnergy = 50.0f;
+    public float shootEnergy = 50.0f;
+    private EnergyBarScript GUIEnergybar;
+    //public float dashRecoveryTime = 1.0f;
+    //public float shootRecoveryTime = 1.0f;
+
     private float yaw = 0.0f;
     private float pitch = 0.0f;
 
@@ -23,6 +31,8 @@ public class PlayerController : MonoBehaviour {
 
     private bool shooting = false;
     private float shootingStartTime;
+
+    private float currentEnergie;
 
     private bool affectedByHit = false;
     private float hitStartTime;
@@ -34,6 +44,7 @@ public class PlayerController : MonoBehaviour {
     private AudioSource audioSource;
     public AudioClip dashSound;
     public AudioClip shootSound;
+    public AudioClip errorSound;
 
     private ParticleSystem particleSystem;
 
@@ -46,6 +57,9 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
         particleSystem = GetComponent<ParticleSystem>();
+        GUIEnergybar = transform.Find("EnergyBar").gameObject.GetComponent<EnergyBarScript>();
+
+        currentEnergie = maxEnergy;
 
         //pour debug
         Screen.lockCursor = true;
@@ -58,6 +72,7 @@ public class PlayerController : MonoBehaviour {
         Hit();
         if (!isLocal)
             return;
+        EnergyUpdate();
         if (!affectedByHit)
         {
             Move();
@@ -124,11 +139,19 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
+            //check energy
+            if(currentEnergie < dashEnergy)
+            {
+                //pas assez d'energie
+                audioSource.PlayOneShot(errorSound);
+                return;
+            }
             dashDirectionWorldSpace = transform.TransformDirection(move_direction);
             if (DashCheck(dashDirectionWorldSpace))
             {
                 audioSource.PlayOneShot(dashSound);
                 dashing = true;
+                currentEnergie -= dashEnergy;
                 dashStartTime = Time.time;
                 transform.Translate(dashDirectionWorldSpace.normalized * Time.deltaTime * dashSpeed, Space.World);
             }
@@ -147,11 +170,18 @@ public class PlayerController : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            //check energy
+            if (currentEnergie < shootEnergy)
+            {
+                //pas assez d'energie
+                audioSource.PlayOneShot(errorSound);
+                return;
+            }
+            currentEnergie -= shootEnergy;
             shooting = true;
             shootingStartTime = Time.time;
 
             audioSource.PlayOneShot(shootSound);
-
 
             //raycast
             Vector3 fwd = laser.transform.TransformDirection(Vector3.forward);
@@ -226,10 +256,18 @@ public class PlayerController : MonoBehaviour {
         return true;
     }
 
+    void EnergyUpdate()
+    {
+        currentEnergie += energyRecovery * Time.deltaTime;
+        if (currentEnergie > maxEnergy)
+            currentEnergie = maxEnergy;
+        GUIEnergybar.BarDisplay = currentEnergie / maxEnergy;
+    }
+
     public void Kill()
     {
-        particleSystem.Emit(0);
-        enabled = false;
+        particleSystem.Play();
+        
     }
 
     void OnCollisionEnter(Collision collision)

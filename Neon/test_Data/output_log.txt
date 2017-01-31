@@ -5,7 +5,7 @@ Direct3D:
     Renderer: NVIDIA GeForce GTX 560 Ti (ID=0x1200)
     Vendor:   NVIDIA
     VRAM:     979 MB
-    Driver:   10.18.13.5445
+    Driver:   21.21.13.7849
 Begin MonoManager ReloadAssembly
 Platform assembly: C:\Users\gubenacc\Documents\Neon\Neon\test_Data\Managed\UnityEngine.dll (this message is harmless)
 Loading C:\Users\gubenacc\Documents\Neon\Neon\test_Data\Managed\UnityEngine.dll into Unity Child Domain
@@ -19,20 +19,14 @@ Platform assembly: C:\Users\gubenacc\Documents\Neon\Neon\test_Data\Managed\Unity
 Loading C:\Users\gubenacc\Documents\Neon\Neon\test_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: C:\Users\gubenacc\Documents\Neon\Neon\test_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
 Loading C:\Users\gubenacc\Documents\Neon\Neon\test_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
-- Completed reload, in  0.067 seconds
+- Completed reload, in  0.106 seconds
 Platform assembly: C:\Users\gubenacc\Documents\Neon\Neon\test_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\gubenacc\Documents\Neon\Neon\test_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1200 59Hz; virtual: 3840x1200 at 0,0
 <RI> Initializing input.
-XInput1_3.dll not found. Trying XInput9_1_0.dll instead...
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.083973 ms
+UnloadTime: 1.534346 ms
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 15e8 -> priority: 1 
-  Thread -> id: 1864 -> priority: 1 
-Log: connection {1} has been disconnected by timeout; address {::ffff:127.0.0.1:7777}
-ClientDisconnected due to error: Timeout
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
+  Thread -> id: 1df0 -> priority: 1 
+  Thread -> id: 1be4 -> priority: 1 

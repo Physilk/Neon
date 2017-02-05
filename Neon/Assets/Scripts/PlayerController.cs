@@ -63,7 +63,7 @@ public class PlayerController : NetworkBehaviour {
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
         particleSystem = GetComponent<ParticleSystem>();
-        //GUIEnergybar = transform.Find("EnergyBar").gameObject.GetComponent<EnergyBarScript>();
+        GUIEnergybar = transform.Find("EnergyBar").gameObject.GetComponent<EnergyBarScript>();
 
         currentEnergie = maxEnergy;
 
@@ -289,7 +289,7 @@ public class PlayerController : NetworkBehaviour {
         currentEnergie += energyRecovery * Time.deltaTime;
         if (currentEnergie > maxEnergy)
             currentEnergie = maxEnergy;
-        //GUIEnergybar.BarDisplay = currentEnergie / maxEnergy;
+        GUIEnergybar.BarDisplay = currentEnergie / maxEnergy;
     }
 
     public void Kill()

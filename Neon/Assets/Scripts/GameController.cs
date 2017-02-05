@@ -27,13 +27,6 @@ public class GameController : MonoBehaviour {
         return false;
     }
 
-    public void RegisterPlayer(PlayerController player)
-    {
-        /*if (player_1 == null)
-            player_1 = player;
-        else player_2 = player;*/
-    }
-
     public static PlayerController GetPlayer(string _playerID)
     {
         return players[_playerID];

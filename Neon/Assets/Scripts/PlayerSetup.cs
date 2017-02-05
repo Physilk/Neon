@@ -24,7 +24,6 @@ public class PlayerSetup : NetworkBehaviour {
                 sceneCamera.gameObject.SetActive(false);
             }
         }
-        //RegisterPlayer();
     }
 
     public override void OnStartClient()
@@ -35,12 +34,6 @@ public class PlayerSetup : NetworkBehaviour {
 
         GameController.RegisterPlayer(_netId, player);
     }
-
-   /* void RegisterPlayer()
-    {
-        string _ID = "Player " + GetComponent<NetworkIdentity>().netId;
-        transform.name = _ID;
-    }*/
 
     void OnDisable()
     {

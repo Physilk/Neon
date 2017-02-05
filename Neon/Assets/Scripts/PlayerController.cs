@@ -4,7 +4,11 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class PlayerController : NetworkBehaviour {
+    [SerializeField]
+    private int maxHealth = 100;
 
+    [SyncVar]
+    private int currentHealth;
     public float speed = 10.0f;
     public float speedH = 2.0f;
     public float speedV = 2.0f;
@@ -64,6 +68,17 @@ public class PlayerController : NetworkBehaviour {
 
         //pour debug
         Screen.lockCursor = true;
+        currentHealth = maxHealth;
+    }
+
+    void TakeDamage()
+    {
+        currentHealth -= 10;
+        Debug.Log(transform.name + " now has " + currentHealth + "hps");
+        if(currentHealth <= 0)
+        {
+            Kill();
+        }
     }
 	
 	// Update is called once per frame
@@ -197,7 +212,7 @@ public class PlayerController : NetworkBehaviour {
                     if(hit.transform.gameObject.tag == "Player")
                     {
                         hit.transform.gameObject.GetComponent<PlayerController>().SetHit(fwd);
-                        CmdPlayerShot(hit.transform.name);
+                        CmdPlayerShot(hit.transform.name, fwd);
                     }
             }
             laser.transform.localScale = new Vector3(1, 1, dist);
@@ -215,9 +230,12 @@ public class PlayerController : NetworkBehaviour {
     }
 
     [Command]
-    void CmdPlayerShot(string _ID)
+    void CmdPlayerShot(string _ID, Vector3 fwd)
     {
         Debug.Log(_ID + " has been shot.");
+        PlayerController _player = GameController.GetPlayer(_ID);
+        _player.transform.position += fwd * Time.deltaTime * hitSpeed;
+        _player.TakeDamage();
     }
 
     void SetHit(Vector3 hitDirection)

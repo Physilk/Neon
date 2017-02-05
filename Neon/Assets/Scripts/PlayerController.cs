@@ -20,6 +20,7 @@ public class PlayerController : NetworkBehaviour {
     public float dashEnergy = 50.0f;
     public float shootEnergy = 50.0f;
     private EnergyBarScript GUIEnergybar;
+    public RespawnScript respawn;
     //public float dashRecoveryTime = 1.0f;
     //public float shootRecoveryTime = 1.0f;
 
@@ -276,6 +277,10 @@ public class PlayerController : NetworkBehaviour {
     public void Kill()
     {
         particleSystem.Play();
+        if(respawn != null)
+        {
+            respawn.SetRespawnTimer();
+        }
         
     }
 

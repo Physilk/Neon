@@ -446,7 +446,7 @@ Light:
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -818,6 +818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 743bbb324500b894d946cc77305562f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  respawnTime: 1
   player: {fileID: 241958558}
 --- !u!1 &273088119
 GameObject:
@@ -1773,7 +1774,7 @@ Light:
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -4343,7 +4344,7 @@ Light:
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -8965,6 +8966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 579dafb4b7ab085498c92e19e0f2383a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
   speed: 10
   speedH: 2
   speedV: 2
@@ -8978,6 +8980,7 @@ MonoBehaviour:
   energyRecovery: 20
   dashEnergy: 50
   shootEnergy: 25
+  respawn: {fileID: 0}
   dashSound: {fileID: 8300000, guid: dece62b0fa7cd894381d73d60185ae25, type: 3}
   shootSound: {fileID: 8300000, guid: c6a3cef3cd992514cbe9626ff5b2c2b7, type: 3}
   errorSound: {fileID: 8300000, guid: a7690482e4d6e6940b3b33262c876ff7, type: 3}
@@ -9016,6 +9019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 743bbb324500b894d946cc77305562f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  respawnTime: 1
   player: {fileID: 1719362052}
 --- !u!1 &1720894688
 GameObject:
@@ -9534,8 +9538,8 @@ Light:
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
+    m_Type: 0
+    m_Resolution: 3
     m_CustomResolution: -1
     m_Strength: 1
     m_Bias: 0

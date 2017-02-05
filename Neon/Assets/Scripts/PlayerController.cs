@@ -24,7 +24,6 @@ public class PlayerController : NetworkBehaviour {
     public float dashEnergy = 50.0f;
     public float shootEnergy = 50.0f;
     private EnergyBarScript GUIEnergybar;
-    public RespawnScript respawn;
     //public float dashRecoveryTime = 1.0f;
     //public float shootRecoveryTime = 1.0f;
 
@@ -63,7 +62,7 @@ public class PlayerController : NetworkBehaviour {
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
         particleSystem = GetComponent<ParticleSystem>();
-        GUIEnergybar = transform.Find("EnergyBar").gameObject.GetComponent<EnergyBarScript>();
+        //GUIEnergybar = transform.Find("EnergyBar").gameObject.GetComponent<EnergyBarScript>();
 
         currentEnergie = maxEnergy;
 
@@ -289,17 +288,20 @@ public class PlayerController : NetworkBehaviour {
         currentEnergie += energyRecovery * Time.deltaTime;
         if (currentEnergie > maxEnergy)
             currentEnergie = maxEnergy;
-        GUIEnergybar.BarDisplay = currentEnergie / maxEnergy;
+        //GUIEnergybar.BarDisplay = currentEnergie / maxEnergy;
     }
 
     public void Kill()
     {
+        Debug.Log("Yo");
         particleSystem.Play();
-        if(respawn != null)
-        {
-            respawn.SetRespawnTimer();
-        }
-        
+        PlayerController player1 = GameController.GetPlayer("Player1");
+        player1.currentHealth = maxHealth;
+        player1.transform.position = new Vector3(10.0f, 2.0f, 0.0f);
+
+        PlayerController player2 = GameController.GetPlayer("Player2");
+        player1.currentHealth = maxHealth;
+        player1.transform.position = new Vector3(-10.0f, 2.0f, 0.0f);
     }
 
     void OnCollisionEnter(Collision collision)

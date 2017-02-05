@@ -16,7 +16,7 @@ public class RespawnScript : MonoBehaviour {
     void Start () {
         position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
         rotation = new Quaternion(player.transform.rotation.x, player.transform.rotation.y, player.transform.rotation.z, player.transform.rotation.w);
-        player.GetComponent<PlayerController>().respawn = this;
+        //player.GetComponent<PlayerController>().respawn = this;
     }
 	
 	// Update is called once per frame

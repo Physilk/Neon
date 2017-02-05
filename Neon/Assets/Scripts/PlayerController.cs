@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : NetworkBehaviour {
 
     public float speed = 10.0f;
     public float speedH = 2.0f;
@@ -57,7 +58,7 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
         particleSystem = GetComponent<ParticleSystem>();
-        GUIEnergybar = transform.Find("EnergyBar").gameObject.GetComponent<EnergyBarScript>();
+        //GUIEnergybar = transform.Find("EnergyBar").gameObject.GetComponent<EnergyBarScript>();
 
         currentEnergie = maxEnergy;
 
@@ -166,6 +167,7 @@ public class PlayerController : MonoBehaviour {
 
     }
     
+    [Client]
     void Shoot()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -195,6 +197,7 @@ public class PlayerController : MonoBehaviour {
                     if(hit.transform.gameObject.tag == "Player")
                     {
                         hit.transform.gameObject.GetComponent<PlayerController>().SetHit(fwd);
+                        CmdPlayerShot(hit.transform.name);
                     }
             }
             laser.transform.localScale = new Vector3(1, 1, dist);
@@ -209,6 +212,12 @@ public class PlayerController : MonoBehaviour {
                 laser.GetComponent<LineRenderer>().enabled = false;
             }
         }
+    }
+
+    [Command]
+    void CmdPlayerShot(string _ID)
+    {
+        Debug.Log(_ID + " has been shot.");
     }
 
     void SetHit(Vector3 hitDirection)
@@ -261,7 +270,7 @@ public class PlayerController : MonoBehaviour {
         currentEnergie += energyRecovery * Time.deltaTime;
         if (currentEnergie > maxEnergy)
             currentEnergie = maxEnergy;
-        GUIEnergybar.BarDisplay = currentEnergie / maxEnergy;
+        //GUIEnergybar.BarDisplay = currentEnergie / maxEnergy;
     }
 
     public void Kill()
